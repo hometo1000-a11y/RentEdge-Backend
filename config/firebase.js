@@ -1,5 +1,10 @@
 const admin = require('firebase-admin');
 
+console.log("Project:", process.env.FIREBASE_PROJECT_ID);
+console.log("Client:", process.env.FIREBASE_CLIENT_EMAIL);
+console.log("Key starts with:", process.env.FIREBASE_PRIVATE_KEY.substring(0, 30));
+console.log("Key ends with:", process.env.FIREBASE_PRIVATE_KEY.substring(process.env.FIREBASE_PRIVATE_KEY.length - 30));
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -8,8 +13,6 @@ if (!admin.apps.length) {
       privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
     }),
   });
-
-  console.log('[Firebase Admin] Initialized with env-based credentials');
 }
 
 module.exports = admin;
