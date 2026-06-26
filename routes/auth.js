@@ -109,9 +109,16 @@ router.post('/pre-check', async (req, res) => {
     return res.json({ available: true });
 
   } catch (err) {
-    console.error('Pre-check error:', err);
-    res.status(500).json({ message: 'Server error during availability check' });
-  }
+  console.error("========== PRECHECK ERROR ==========");
+  console.error(err);
+  console.error(err.stack);
+
+  res.status(500).json({
+    message: err.message,
+    code: err.code,
+    stack: process.env.NODE_ENV !== "production" ? err.stack : undefined
+  });
+}
 });
 
 // ─── POST /api/auth/complete-signup ───────────────────────────────
