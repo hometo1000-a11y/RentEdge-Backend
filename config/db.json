@@ -1,0 +1,392 @@
+{
+  "users": [],
+  "properties": [
+    {
+      "id": "prop-1",
+      "title": "The Edge Residences - Indiranagar Skyloft",
+      "type": "Premium Apartment",
+      "city": "Bengaluru",
+      "area": "Indiranagar",
+      "price": 35000,
+      "rent": 35000,
+      "depositMonths": 2,
+      "deposit": 70000,
+      "rentScoreRequired": 720,
+      "beds": 2,
+      "bhk": 2,
+      "baths": 2,
+      "sqft": 1350,
+      "images": [
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+      "location": "Indiranagar, Bengaluru",
+      "tag": "Zero-Deposit Eligible",
+      "amenities": [
+        "Private Balcony",
+        "High-Speed Wifi",
+        "Automated Lock",
+        "In-Unit Gym",
+        "EV Charging Spot"
+      ],
+      "description": "Breathtaking high-floor corner apartment situated in Indiranagar. Redesigned for modern professionals, it features a glass-walled home office area, premium built-in appliances, smart energy monitoring, and biometric keyless security.",
+      "ownerName": "Rajvardhan Pawar",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 98765 43210"
+    },
+    {
+      "id": "prop-2",
+      "title": "Juhu Coastal Sky Villa",
+      "type": "Luxury Penthouse",
+      "city": "Mumbai",
+      "area": "Juhu",
+      "price": 85000,
+      "rent": 85000,
+      "depositMonths": 3,
+      "deposit": 255000,
+      "rentScoreRequired": 780,
+      "beds": 3,
+      "bhk": 3,
+      "baths": 3,
+      "sqft": 2400,
+      "images": [
+        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
+      "location": "Juhu, Mumbai",
+      "tag": "Verified Deed",
+      "amenities": [
+        "Sea View Lounge",
+        "Private Plunge Pool",
+        "Dedicated Concierge",
+        "24/7 Security Node",
+        "Chef-on-Call"
+      ],
+      "description": "An architectural marvel overlooking the Arabian Sea in Juhu. This double-height ceiling penthouse represents the zenith of premium coastal living, complete with private elevator access, custom Italian marble flooring, and smart lighting systems.",
+      "ownerName": "Vikram Aditya",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 97321 09876"
+    },
+    {
+      "id": "prop-3",
+      "title": "Khar Oasis Smart Suite",
+      "type": "Studio Suite",
+      "city": "Mumbai",
+      "area": "Khar West",
+      "price": 28000,
+      "rent": 28000,
+      "depositMonths": 2,
+      "deposit": 56000,
+      "rentScoreRequired": 685,
+      "beds": 1,
+      "bhk": 1,
+      "baths": 1,
+      "sqft": 750,
+      "images": [
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1560185127-6a2806647f81?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+      "location": "Khar West, Mumbai",
+      "tag": "Tech Hub Special",
+      "amenities": [
+        "Keyless Entry",
+        "Biophilic Design",
+        "Rooftop Lounge Access",
+        "Integrated AC Control",
+        "Fibre Broadband"
+      ],
+      "description": "A cozy but technologically packed studio suite optimized for founders, engineers, and creatives. Centrally located in Khar West, the property boasts biophilic plants, automated workspace controls, and premium voice-activated systems.",
+      "ownerName": "Nisha Mehta",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 88291 00291"
+    },
+    {
+      "id": "prop-4",
+      "title": "Koregaon Park Executive Sanctuary",
+      "type": "Luxury Villa",
+      "city": "Pune",
+      "area": "Koregaon Park",
+      "price": 120000,
+      "rent": 120000,
+      "depositMonths": 2,
+      "deposit": 240000,
+      "rentScoreRequired": 750,
+      "beds": 4,
+      "bhk": 4,
+      "baths": 4,
+      "sqft": 3600,
+      "images": [
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+      "location": "Koregaon Park, Pune",
+      "tag": "Premium Luxury",
+      "amenities": [
+        "Lush Private Garden",
+        "Home Theatre Screen",
+        "Solar Backed Grid",
+        "Dedicated Pet Zone",
+        "Premium Barbecue Deck"
+      ],
+      "description": "A serene hideaway located on Pune's most desirable street. Designed with organic materials, this villa features an open-plan chef's kitchen, expansive wrap-around wooden decks, a master bedroom with double walk-in wardrobes, and full security systems.",
+      "ownerName": "Sanjay Godrej",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 91456 78901"
+    },
+    {
+      "id": "prop-5",
+      "title": "HSR Smart Premium Suite",
+      "type": "Premium Apartment",
+      "city": "Bengaluru",
+      "area": "HSR Layout",
+      "price": 45000,
+      "rent": 45000,
+      "depositMonths": 1,
+      "deposit": 45000,
+      "rentScoreRequired": 700,
+      "beds": 2,
+      "bhk": 2,
+      "baths": 2,
+      "sqft": 1200,
+      "images": [
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1560185127-6a2806647f81?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+      "location": "HSR Layout, Bengaluru",
+      "tag": "Fintech Hub Special",
+      "amenities": [
+        "Fibre Broadband",
+        "Ergonomic Desk & Chair",
+        "In-Unit Laundry",
+        "Smart Refrigerator",
+        "Clubhouse Pass"
+      ],
+      "description": "Perfect for fintech developers and builders, this modular 2 BHK in HSR Sector 3 comes fully pre-equipped with high-speed multi-WAN backup internet, dedicated home workstation setups, biometric gates, and smart appliances.",
+      "ownerName": "Rahul Malhotra",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 99281 10092"
+    },
+    {
+      "id": "prop-pg1",
+      "title": "Stanza Living Montreal - Premium Co-living",
+      "type": "PG / Hostel",
+      "city": "Bengaluru",
+      "area": "Koramangala",
+      "price": 13500,
+      "rent": 13500,
+      "depositMonths": 1,
+      "deposit": 13500,
+      "rentScoreRequired": 650,
+      "beds": 1,
+      "bhk": 1,
+      "baths": 1,
+      "sqft": 250,
+      "images": [
+        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80",
+      "location": "Koramangala, Bengaluru",
+      "tag": "Food Included",
+      "amenities": [
+        "3-Meals Daily",
+        "High-Speed Wifi",
+        "Housekeeping",
+        "Gym Access",
+        "Biometric Entry"
+      ],
+      "description": "Elite co-living space optimized for students and young professionals. Offers delicious home-style meals, dynamic community events, high-speed internet, and regular sanitization services.",
+      "ownerName": "Amit Sharma",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 98112 23344"
+    },
+    {
+      "id": "prop-pg2",
+      "title": "Zolo Stay Elite - Shared Tech PG",
+      "type": "PG / Hostel",
+      "city": "Pune",
+      "area": "Kharadi",
+      "price": 9000,
+      "rent": 9000,
+      "depositMonths": 1,
+      "deposit": 9000,
+      "rentScoreRequired": 600,
+      "beds": 2,
+      "bhk": 2,
+      "baths": 2,
+      "sqft": 350,
+      "images": [
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+      "location": "Kharadi, Pune",
+      "tag": "Tech Park Proximity",
+      "amenities": [
+        "Shared Kitchen",
+        "Wifi",
+        "Weekly Laundry",
+        "Gaming Zone",
+        "Power Backup"
+      ],
+      "description": "Centrally located premium co-living property with dual sharing rooms. Fully furnished with air conditioning, individual closets, studying desks, and fully equipped community spaces.",
+      "ownerName": "Priya Nair",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 97112 34567"
+    },
+    {
+      "id": "prop-pg3",
+      "title": "Colive Town Hub - Triple Sharing Studio",
+      "type": "PG / Hostel",
+      "city": "Bengaluru",
+      "area": "HSR Layout",
+      "price": 7500,
+      "rent": 7500,
+      "depositMonths": 1,
+      "deposit": 7500,
+      "rentScoreRequired": 620,
+      "beds": 3,
+      "bhk": 3,
+      "baths": 1,
+      "sqft": 400,
+      "images": [
+        "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80",
+      "location": "HSR Layout, Bengaluru",
+      "tag": "Budget Friendly",
+      "amenities": [
+        "High-speed Internet",
+        "Housekeeping",
+        "Lounge Area",
+        "Rooftop Cafeteria"
+      ],
+      "description": "Affordable and lively triple sharing room options in HSR Sector 2. Walking distance from major startup offices, cafes, and transit routes. Social community-centric living.",
+      "ownerName": "Rohan Deshmukh",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 99112 23344"
+    },
+    {
+      "id": "prop-pg4",
+      "title": "Nestaway Cozy Hostel - Quad Sharing Dorm",
+      "type": "PG / Hostel",
+      "city": "Mumbai",
+      "area": "Andheri West",
+      "price": 6000,
+      "rent": 6000,
+      "depositMonths": 1,
+      "deposit": 6000,
+      "rentScoreRequired": 580,
+      "beds": 4,
+      "bhk": 4,
+      "baths": 2,
+      "sqft": 500,
+      "images": [
+        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80"
+      ],
+      "image": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80",
+      "location": "Andheri West, Mumbai",
+      "tag": "Metro Proximity",
+      "amenities": [
+        "Wifi",
+        "Water Purifier",
+        "Individual Lockers",
+        "CCTV Security",
+        "Self-help Kitchen"
+      ],
+      "description": "Budget quad-sharing dormitory space for students and entry-level professionals in Andheri West. High security, regular housekeeping, and locker storage facilities.",
+      "ownerName": "Karan Johar",
+      "ownerPhoneMasked": "+91 ••••• •••••",
+      "ownerPhoneFull": "+91 99999 88888"
+    },
+    {
+      "owner_id": "e5ec2a0b-3859-4cc7-a628-4864e711c122",
+      "property_name": "pawar housing",
+      "property_type": "Apartment",
+      "description": "test data",
+      "address": "pune",
+      "city": "pune",
+      "state": "maharashtra",
+      "pincode": "411057",
+      "rent_amount": 10001,
+      "deposit_amount": 10000,
+      "maintenance_amount": 0,
+      "area_sqft": 250,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "cover_image_url": "https://ik.imagekit.io/hevbzarnq/property_image_f8jn87dVE.jpg",
+      "status": "active",
+      "id": "prop-mg99ir85w"
+    }
+  ],
+  "tenants": [],
+  "leases": [],
+  "payments": [],
+  "property_tags": [
+    {
+      "property_id": "prop-mg99ir85w",
+      "tag_name": "Family Friendly",
+      "id": "prop-bp83dz5q9"
+    }
+  ],
+  "property_images": [
+    {
+      "property_id": "prop-mg99ir85w",
+      "imagekit_file_id": "6a29883c5c7cd75eb801f320",
+      "image_url": "https://ik.imagekit.io/hevbzarnq/property_image_f8jn87dVE.jpg",
+      "thumbnail_url": "https://ik.imagekit.io/hevbzarnq/tr:n-ik_ml_thumbnail/property_image_f8jn87dVE.jpg",
+      "display_order": 0,
+      "id": "prop-ubdlpw03c"
+    },
+    {
+      "property_id": "prop-mg99ir85w",
+      "imagekit_file_id": "6a2988515c7cd75eb80272d8",
+      "image_url": "https://ik.imagekit.io/hevbzarnq/property_image_OVxWhAGat.jpg",
+      "thumbnail_url": "https://ik.imagekit.io/hevbzarnq/tr:n-ik_ml_thumbnail/property_image_OVxWhAGat.jpg",
+      "display_order": 1,
+      "id": "prop-fopgfk36t"
+    }
+  ],
+  "property_contacts": [
+    {
+      "property_id": "prop-mg99ir85w",
+      "name": "raj",
+      "role": "Owner",
+      "phone": "9433057809",
+      "whatsapp": "",
+      "email": "",
+      "id": "prop-ruy7c7hcj"
+    },
+    {
+      "property_id": "prop-mg99ir85w",
+      "name": "anshul",
+      "role": "Caretaker",
+      "phone": "0909099000",
+      "whatsapp": "",
+      "email": "",
+      "id": "prop-h8g1vza27"
+    }
+  ]
+}
