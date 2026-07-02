@@ -171,9 +171,15 @@ router.post('/complete-signup', async (req, res) => {
       user: sanitizeUser(appUser)
     });
   } catch (err) {
-    console.error('Complete signup error:', err);
-    return res.status(500).json({ message: 'Server error during signup completion' });
-  }
+  console.error("Complete signup error:", err);
+
+  return res.status(500).json({
+    message: err.message,
+    code: err.code,
+    details: err.details,
+    hint: err.hint,
+  });
+}
 });
 
 router.post('/login', async (req, res) => {
