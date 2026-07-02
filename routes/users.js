@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { supabase } = require('../config/supabase');
 const authMiddleware = require('../middleware/auth');
-const firebaseAdmin = require('../config/firebase');
 
 function cleanPhone(phone) {
   const cleaned = phone.replace(/[\s\-\+]/g, '');
@@ -123,7 +122,10 @@ router.get('/me', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json(user);
+    res.json({
+      ...user,
+      authUserId: user.firebase_uid
+    });
   } catch (err) {
     console.error('Error fetching user profile:', err);
     res.status(500).json({ message: 'Server error' });
@@ -160,7 +162,13 @@ router.put('/me', authMiddleware, async (req, res) => {
       return res.status(500).json({ message: 'Failed to update profile' });
     }
 
-    res.json({ message: 'Profile updated successfully', user: updatedUser });
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        ...updatedUser,
+        authUserId: updatedUser.firebase_uid
+      }
+    });
   } catch (err) {
     console.error('Server error updating profile:', err);
     res.status(500).json({ message: 'Server error' });
@@ -187,14 +195,6 @@ router.post('/check-email-change', authMiddleware, async (req, res) => {
       return res.status(400).json({ message: "This email address is already in use." });
     }
 
-    // 2. Check Firebase
-    try {
-      await firebaseAdmin.auth().getUserByEmail(newEmail.toLowerCase());
-      return res.status(400).json({ message: "This email address is already in use." });
-    } catch(err) {
-      if (err.code !== 'auth/user-not-found') throw err;
-    }
-
     return res.json({ available: true });
   } catch(err) {
     console.error('Check email change error:', err);
@@ -210,8 +210,6 @@ router.post('/check-phone-change', authMiddleware, async (req, res) => {
   if (!newPhone) return res.status(400).json({ message: 'Phone required' });
 
   const cleanedPhone = cleanPhone(newPhone);
-  const formattedPhone = cleanedPhone.length === 10 ? `+91${cleanedPhone}` : `+${cleanedPhone}`;
-
   try {
     // 1. Check database
     const { data: dbUser } = await supabase
@@ -223,14 +221,6 @@ router.post('/check-phone-change', authMiddleware, async (req, res) => {
 
     if (dbUser) {
       return res.status(400).json({ message: "This phone number is already in use." });
-    }
-
-    // 2. Check Firebase
-    try {
-      await firebaseAdmin.auth().getUserByPhoneNumber(formattedPhone);
-      return res.status(400).json({ message: "This phone number is already in use." });
-    } catch(err) {
-      if (err.code !== 'auth/user-not-found') throw err;
     }
 
     return res.json({ available: true });

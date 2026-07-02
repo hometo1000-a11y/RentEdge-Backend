@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const jwt = require('jsonwebtoken');
-const { supabase, db } = require('../config/supabase');
+const { supabase } = require('../config/supabase');
 const authMiddleware = require('../middleware/auth');
-const firebaseAdmin = require('../config/firebase');
-
 
 const JWT_SECRET = process.env.JWT_SECRET || 'rentedge_secret_jwt_token_key_2026_premium';
-
-// ─── Helpers ──────────────────────────────────────────────────────
 
 function generateJWT(user) {
   const payload = {
@@ -25,7 +21,7 @@ function generateJWT(user) {
 function sanitizeUser(user) {
   return {
     id: user.id,
-    firebaseUid: user.firebase_uid,
+    authUserId: user.firebase_uid,
     fullName: user.full_name,
     email: user.email,
     phone: user.phone,
@@ -33,19 +29,8 @@ function sanitizeUser(user) {
     isOwner: user.is_owner,
     emailVerified: user.email_verified,
     phoneVerified: user.phone_verified,
-    // Derive legacy "role" for frontend compatibility
     role: user.is_owner ? 'owner' : 'tenant'
   };
-}
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePhone(phone) {
-  // Accept 10 digit Indian numbers (with or without +91 prefix)
-  const cleaned = phone.replace(/[\s\-\+]/g, '');
-  return /^(91)?[6-9]\d{9}$/.test(cleaned);
 }
 
 function cleanPhone(phone) {
@@ -54,8 +39,76 @@ function cleanPhone(phone) {
   return cleaned;
 }
 
-// ─── POST /api/auth/pre-check ───────────────────────────────────────
-// Strict uniqueness check for Signup Validation and Firebase Validation
+async function getSupabaseAuthUser(accessToken) {
+  const { data, error } = await supabase.auth.getUser(accessToken);
+  if (error) throw error;
+  if (!data?.user) throw new Error('Supabase session missing');
+  return data.user;
+}
+
+async function loadOrCreateUserFromSupabase({ supabaseUser, fullName, role }) {
+  const email = (supabaseUser.email || '').toLowerCase();
+  const phone = supabaseUser.user_metadata?.phone ? cleanPhone(String(supabaseUser.user_metadata.phone)) : '';
+  const resolvedFullName = fullName || supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.fullName || '';
+  const isTenant = role === 'tenant' || role === 'both' || supabaseUser.user_metadata?.role === 'tenant' || !supabaseUser.user_metadata?.role;
+  const isOwner = role === 'owner' || role === 'both' || supabaseUser.user_metadata?.role === 'owner';
+  const emailVerified = Boolean(supabaseUser.email_confirmed_at || supabaseUser.confirmed_at);
+
+  const searchTerms = [`firebase_uid.eq.${supabaseUser.id}`];
+  if (email) searchTerms.push(`email.eq.${email}`);
+  if (phone) searchTerms.push(`phone.eq.${phone}`);
+
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('*')
+    .or(searchTerms.join(','))
+    .maybeSingle();
+
+  if (existingUser) {
+    const updates = {};
+    if (existingUser.firebase_uid !== supabaseUser.id) updates.firebase_uid = supabaseUser.id;
+    if (resolvedFullName && existingUser.full_name !== resolvedFullName) updates.full_name = resolvedFullName;
+    if (email && existingUser.email !== email) updates.email = email;
+    if (phone && existingUser.phone !== phone) updates.phone = phone;
+    if (existingUser.email_verified !== emailVerified) updates.email_verified = emailVerified;
+    if (existingUser.phone_verified === undefined || existingUser.phone_verified === null) updates.phone_verified = Boolean(phone);
+    if (existingUser.is_tenant !== isTenant) updates.is_tenant = isTenant;
+    if (existingUser.is_owner !== isOwner) updates.is_owner = isOwner;
+
+    if (Object.keys(updates).length > 0) {
+      const { data: updatedUser, error } = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', existingUser.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return updatedUser;
+    }
+
+    return existingUser;
+  }
+
+  const { data: newUser, error: insertError } = await supabase
+    .from('users')
+    .insert({
+      firebase_uid: supabaseUser.id,
+      full_name: resolvedFullName,
+      email,
+      phone,
+      is_tenant: isTenant,
+      is_owner: isOwner,
+      email_verified: emailVerified,
+      phone_verified: Boolean(phone)
+    })
+    .select()
+    .single();
+
+  if (insertError) throw insertError;
+  return newUser;
+}
+
 router.post('/pre-check', async (req, res) => {
   const { email, phone } = req.body;
 
@@ -64,10 +117,8 @@ router.post('/pre-check', async (req, res) => {
   }
 
   const cleanedPhone = cleanPhone(phone);
-  const formattedPhone = cleanedPhone.length === 10 ? `+91${cleanedPhone}` : `+${cleanedPhone}`;
 
   try {
-    // 1. Signup Validation - Database Check
     const { data: emailUser } = await supabase
       .from('users')
       .select('id')
@@ -88,219 +139,77 @@ router.post('/pre-check', async (req, res) => {
       return res.json({ status: 'exists', message: 'This phone number is already registered.' });
     }
 
-    // 2. Firebase Validation
-    try {
-      await firebaseAdmin.auth().getUserByEmail(email.toLowerCase());
-      // If found:
-      return res.json({ status: 'exists', message: 'This email address is already in use.' });
-    } catch (err) {
-      if (err.code !== 'auth/user-not-found') throw err;
-    }
-
-    try {
-      await firebaseAdmin.auth().getUserByPhoneNumber(formattedPhone);
-      // If found:
-      return res.json({ status: 'exists', message: 'This phone number is already in use.' });
-    } catch (err) {
-      if (err.code !== 'auth/user-not-found') throw err;
-    }
-
-    // If neither exists anywhere, it's available
     return res.json({ available: true });
-
   } catch (err) {
-  console.error("========== PRECHECK ERROR ==========");
-  console.error(err);
-  console.error(err.stack);
-
-  res.status(500).json({
-    message: err.message,
-    code: err.code,
-    stack: process.env.NODE_ENV !== "production" ? err.stack : undefined
-  });
-}
+    console.error('PRECHECK ERROR:', err);
+    return res.status(500).json({
+      message: err.message,
+      stack: process.env.NODE_ENV !== 'production' ? err.stack : undefined
+    });
+  }
 });
 
-// ─── POST /api/auth/complete-signup ───────────────────────────────
-// Single User Creation Point
 router.post('/complete-signup', async (req, res) => {
-  const { fullName, role, firebaseIdToken } = req.body;
+  const { fullName, role, supabaseAccessToken } = req.body;
 
-  if (!fullName || !role || !firebaseIdToken) {
-    return res.status(400).json({ message: 'Missing required signup fields' });
+  if (!supabaseAccessToken) {
+    return res.status(400).json({ message: 'Supabase access token is required' });
   }
 
   try {
-    // 1. Verify Firebase Token
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseIdToken);
-    const firebaseUid = decodedToken.uid;
-    const email = decodedToken.email || '';
-    const phone = decodedToken.phone_number || '';
-    const emailVerified = decodedToken.email_verified === true;
-    const phoneVerified = !!phone;
+    const supabaseUser = await getSupabaseAuthUser(supabaseAccessToken);
+    const emailVerified = Boolean(supabaseUser.email_confirmed_at || supabaseUser.confirmed_at);
 
-    // 2. Strict Backend Verification Check
-    if (!emailVerified || !phoneVerified || !email) {
-      return res.status(403).json({ 
-        message: 'Registration incomplete. Both email and phone must be verified.' 
-      });
+    if (!emailVerified) {
+      return res.status(403).json({ message: 'Email must be verified before completing signup.' });
     }
 
-    // 3. Duplicate Protection Check
-    const cleanedPhone = cleanPhone(phone);
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('*')
-      .or(`firebase_uid.eq.${firebaseUid},email.eq.${email.toLowerCase()},phone.eq.${cleanedPhone}`)
-      .maybeSingle();
+    const appUser = await loadOrCreateUserFromSupabase({ supabaseUser, fullName, role });
 
-    if (existingUser) {
-      // If user already exists, seamlessly log them in instead of throwing an error
-      return res.json({
-        token: generateJWT(existingUser),
-        user: sanitizeUser(existingUser),
-        message: 'Account already existed. Logged in successfully.'
-      });
-    }
-
-    // 4. Create Database Record
-    const isTenant = role === 'tenant' || role === 'both';
-    const isOwner = role === 'owner' || role === 'both';
-
-    const { data: newUser, error: insertError } = await supabase
-      .from('users')
-      .insert({
-        firebase_uid: firebaseUid,
-        full_name: fullName,
-        email: email.toLowerCase(),
-        phone: cleanedPhone,
-        is_tenant: isTenant,
-        is_owner: isOwner,
-        email_verified: true,
-        phone_verified: true
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error('User insert error:', insertError);
-      return res.status(500).json({ message: 'Failed to create user profile: ' + insertError.message });
-    }
-
-    // 5. Generate JWT and return session
-    const token = generateJWT(newUser);
-
-    res.status(201).json({
-      token,
-      user: sanitizeUser(newUser)
+    return res.status(201).json({
+      token: generateJWT(appUser),
+      user: sanitizeUser(appUser)
     });
   } catch (err) {
     console.error('Complete signup error:', err);
-    res.status(500).json({ message: 'Server error during signup completion' });
+    return res.status(500).json({ message: 'Server error during signup completion' });
   }
 });
 
-// ─── POST /api/auth/login ─────────────────────────────────────────
 router.post('/login', async (req, res) => {
-  const { firebaseIdToken } = req.body;
+  const { supabaseAccessToken } = req.body;
 
-  if (!firebaseIdToken) {
-    return res.status(400).json({ message: 'Firebase token is required' });
+  if (!supabaseAccessToken) {
+    return res.status(400).json({ message: 'Supabase access token is required' });
   }
 
   try {
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseIdToken);
-    const firebaseUid = decodedToken.uid;
+    const supabaseUser = await getSupabaseAuthUser(supabaseAccessToken);
+    const appUser = await loadOrCreateUserFromSupabase({
+      supabaseUser,
+      fullName: supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.fullName || '',
+      role: supabaseUser.user_metadata?.role || 'tenant'
+    });
 
-    const { data: user } = await supabase
-      .from('users')
-      .select('*')
-      .eq('firebase_uid', firebaseUid)
-      .maybeSingle();
-
-    if (!user) {
-      // Seamless migration link for users who haven't updated to Firebase yet
-      const { data: legacyUser } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', decodedToken.email?.toLowerCase())
-        .maybeSingle();
-        
-      if (legacyUser && !legacyUser.firebase_uid) {
-        const { data: linkedUser } = await supabase
-          .from('users')
-          .update({ firebase_uid: firebaseUid })
-          .eq('id', legacyUser.id)
-          .select()
-          .single();
-          
-        if (linkedUser) {
-           return res.json({
-             token: generateJWT(linkedUser),
-             user: sanitizeUser(linkedUser)
-           });
-        }
-      }
-      return res.status(401).json({ message: 'No profile found for this account. Please sign up.' });
-    }
-
-    // Update last login timestamp
     await supabase
       .from('users')
       .update({ updated_at: new Date().toISOString() })
-      .eq('id', user.id);
+      .eq('id', appUser.id);
 
-    // Generate JWT
-    const token = generateJWT(user);
-
-    res.json({
-      token,
-      user: sanitizeUser(user)
+    return res.json({
+      token: generateJWT(appUser),
+      user: sanitizeUser(appUser)
     });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ message: 'Server error during login' });
+    return res.status(500).json({ message: 'Server error during login' });
   }
 });
 
-// ─── POST /api/auth/logout ────────────────────────────────────────
 router.post('/logout', authMiddleware, async (req, res) => {
-  // JWT is stateless — logout handled client-side.
   res.json({ message: 'Logged out successfully' });
 });
 
-// ─── POST /api/auth/lookup-email ───────────────────────────────────
-// Resolves an identifier (phone or email) to an email for Firebase login
-router.post('/lookup-email', async (req, res) => {
-  const { identifier } = req.body;
-  if (!identifier) return res.status(400).json({ message: 'Identifier required' });
-
-  try {
-    const isEmail = validateEmail(identifier);
-    let queryEmail = identifier.toLowerCase();
-
-    if (!isEmail) {
-      const cleanedPhone = cleanPhone(identifier);
-      const { data: user } = await supabase
-        .from('users')
-        .select('email')
-        .eq('phone', cleanedPhone)
-        .maybeSingle();
-      
-      if (!user) {
-        return res.status(404).json({ message: 'Account not found for this phone number' });
-      }
-      queryEmail = user.email;
-    }
-
-    res.json({ email: queryEmail });
-  } catch (err) {
-    console.error('Lookup email error:', err);
-    res.status(500).json({ message: 'Server error during lookup' });
-  }
-});
-
-// ─── GET /api/auth/me ─────────────────────────────────────────────
 router.get('/me', authMiddleware, async (req, res) => {
   try {
     const { data: user, error } = await supabase
