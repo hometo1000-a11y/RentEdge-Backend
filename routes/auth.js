@@ -207,9 +207,15 @@ router.post('/login', async (req, res) => {
       user: sanitizeUser(appUser)
     });
   } catch (err) {
-    console.error('Login error:', err);
-    return res.status(500).json({ message: 'Server error during login' });
-  }
+  console.error('Login error:', err);
+
+  return res.status(500).json({
+    message: err.message,
+    code: err.code,
+    details: err.details,
+    hint: err.hint,
+  });
+}
 });
 
 router.post('/logout', authMiddleware, async (req, res) => {
